@@ -98,6 +98,7 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
       min: 10,
       max: 400,
       slide: function (evt, ui) {
+        evt.stopImmediatePropagation();
         $("#esri-symbol").attr({
           width: ui.value,
           height: ui.value
@@ -110,7 +111,8 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
       }
     });
 
-    var updateEsriSymbol = function () {
+    var updateEsriSymbol = function (evt) {
+      evt.stopImmediatePropagation();
       $("#esri-symbol path").css({
         "fill": "rgb(" + [$("#red-slider").slider("option", "value"), $("#green-slider").slider("option", "value"), $("#blue-slider").slider("option", "value")].join(",") + ")"
       });
