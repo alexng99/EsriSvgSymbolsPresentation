@@ -108,6 +108,7 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
           width: ui.value,
           height: ui.value
         });
+        return false;
       }
     });
 
@@ -116,6 +117,8 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
       $("#esri-symbol path").css({
         "fill": "rgb(" + [$("#red-slider").slider("option", "value"), $("#green-slider").slider("option", "value"), $("#blue-slider").slider("option", "value")].join(",") + ")"
       });
+
+      return false;
     };
 
     $("#red-slider").slider({
