@@ -1,370 +1,431 @@
 <!doctype html>
-
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=1024" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>impress.js | presentation tool based on the power of CSS3 transforms and transitions in modern browsers | by Bartek Szopka @bartaz</title>
-    
-    <meta name="description" content="impress.js is a presentation tool based on the power of CSS3 transforms and transitions in modern browsers and inspired by the idea behind prezi.com." />
-    <meta name="author" content="Bartek Szopka" />
 
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" rel="stylesheet" />
+	<head>
+		<meta charset="utf-8">
 
-    <link rel="stylesheet" href="http://js.arcgis.com/3.7/js/esri/css/esri.css">
-    <link href="css/impress-demo.css" rel="stylesheet" />
+		<title>reveal.js - The HTML Presentation Framework</title>
 
-    
-    <link rel="shortcut icon" href="favicon.png" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-</head>
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
 
-<!--
-    
-    Body element is used by impress.js to set some useful class names, that will allow you to detect
-    the support and state of the presentation in CSS or other scripts.
-    
-    First very useful class name is `impress-not-supported`. This class means, that browser doesn't
-    support features required by impress.js, so you should apply some fallback styles in your CSS.
-    It's not necessary to add it manually on this element. If the script detects that browser is not
-    good enough it will add this class, but keeping it in HTML means that users without JavaScript
-    will also get fallback styles.
-    
-    When impress.js script detects that browser supports all required features, this class name will
-    be removed.
-    
-    The class name on body element also depends on currently active presentation step. More details about
-    it can be found later, when `hint` element is being described.
-    
--->
-<body class="impress-not-supported">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<!--
-    For example this fallback message is only visible when there is `impress-not-supported` class on body.
--->
-<div class="fallback-message">
-    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
-    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
-</div>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<!--
-    
-    Now that's the core element used by impress.js.
-    
-    That's the wrapper for your presentation steps. In this element all the impress.js magic happens.
-    It doesn't have to be a `<div>`. Only `id` is important here as that's how the script find it.
-    
-    You probably won't need it now, but there are some configuration options that can be set on this element.
-    
-    To change the duration of the transition between slides use `data-transition-duration="2000"` giving it
-    a number of ms. It defaults to 1000 (1s).
-    
-    You can also control the perspective with `data-perspective="500"` giving it a number of pixels.
-    It defaults to 1000. You can set it to 0 if you don't want any 3D effects.
-    If you are willing to change this value make sure you understand how CSS perspective works:
-    https://developer.mozilla.org/en/CSS/perspective
-    
-    But as I said, you won't need it for now, so don't worry - there are some simple but interesing things
-    right around the corner of this tag ;)
-    
--->
-<div id="impress">
-    <div id="title" class="step" data-x="-1000" data-y="-2500" data-scale="2">
-        
-        <h1>Custom SVG Symbology</h1>
-        <h3 class="footnote">with ESRI Javascript API</h3>
 
-        <div class="name">Alex Nguyen</div>
-        <div class="name">GIS Developer</div>
-        <div class="name">LJA Engineering, Inc.</div>
-    </div>
+		<link rel="stylesheet" href="css/smoothness/jquery-ui-1.10.3.custom.css" >
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
 
-    <div id="what-is-svg" class="step slide" data-x="-2000" data-y="-1500">
-        <h1>What is SVG?</h1>
-        <ul>
-            <li><strong>S</strong>calable <strong>V</strong>ector <strong>G</strong>raphics</li>
-            <li>Circles, rectangles, and paths</li>
-            <li>Can apply color and gradients</li>
-        </ul>
-    </div>
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		
+		<link rel="stylesheet" href="http://js.arcgis.com/3.7/js/esri/css/esri.css">
+		<link rel="stylesheet" href="css/styles.css">		
 
-    <div id="picturemarkersymbol" class="step slide" data-x="-1000" data-y="-1500">
-        <h1></h1>
-        <div id="map-picturemarkersymbol">            
-        </div>
-    </div>      
-    
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
 
-    <!--
-        
-        The `id` attribute of the step element is used to identify it in the URL, but it's optional.
-        If it is not defined, it will get a default value of `step-N` where N is a number of slide.
-        
-        So in the example below it'll be `step-2`.
-        
-        The hash part of the url when this step is active will be `#/step-2`.
-        
-        You can also use `#step-2` in a link, to point directly to this particular step.
-        
-        Please note, that while `#/step-2` (with slash) would also work in a link it's not recommended.
-        Using classic `id`-based links like `#step-2` makes these links usable also in fallback mode.
-        
-    -->
-    <div class="step slide" data-x="0" data-y="-1500">
-        <q>Don't you think that presentations given <strong>in modern browsers</strong> shouldn't <strong>copy the limits</strong> of 'classic' slide decks?</q>
-    </div>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
 
-    <div class="step slide" data-x="1000" data-y="-1500">
-        <q>Would you like to <strong>impress your audience</strong> with <strong>stunning visualization</strong> of your talk?</q>
-    </div>
+	<body>
 
-    <!--
-        
-        This is an example of step element being scaled.
-        
-        Again, we use a `data-` attribute, this time it's `data-scale="4"`, so it means that this
-        element will be 4 times larger than the others.
-        From presentation and transitions point of view it means, that it will have to be scaled
-        down (4 times) to make it back to it's correct size.
-        
-    -->
-    <div id="title2" class="step" data-x="0" data-y="0" data-scale="4">
-        <span class="try">then you should try</span>
-        <h1>impress.js<sup>*</sup></h1>
-        <span class="footnote"><sup>*</sup> no rhyme intended</span>
-    </div>
+		<div class="reveal">
 
-    <!--
-        
-        This element introduces rotation.
-        
-        Notation shouldn't be a surprise. We use `data-rotate="90"` attribute, meaning that this
-        element should be rotated by 90 degrees clockwise.
-        
-    -->
-    <div id="its" class="step" data-x="850" data-y="3000" data-rotate="90" data-scale="5">
-        <p>It's a <strong>presentation tool</strong> <br/>
-        inspired by the idea behind <a href="http://prezi.com">prezi.com</a> <br/>
-        and based on the <strong>power of CSS3 transforms and transitions</strong> in modern browsers.</p>
-    </div>
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Custom SVG Symbology</h1>
+					<h3>with ESRI Javascript API</h3>
+					<p>
+						<small>Alex Nguyen / GIS Developer / LJA Engineering, Inc.</small>
+					</p>
+				</section>
 
-    <div id="big" class="step" data-x="3500" data-y="2100" data-rotate="180" data-scale="6">
-        <p>visualize your <b>big</b> <span class="thoughts">thoughts</span></p>
-    </div>
+				<section class="what-is-svg">
+					<h2>What is SVG?</h2>
+	        <ul>
+	            <li><strong>S</strong>calable <strong>V</strong>ector <strong>G</strong>raphics</li>
+	            <li>Circles, rectangles, and paths</li>
+	            <li>Can apply color and gradients</li>
+	        </ul>
 
-    <!--
-        
-        And now it gets really exiting! We move into third dimension!
-        
-        Along with `data-x` and `data-y`, you can define the position on third (Z) axis, with
-        `data-z`. In the example below we use `data-z="-3000"` meaning that element should be
-        positioned far away from us (by 3000px).
-        
-    -->
-    <div id="tiny" class="step" data-x="2825" data-y="2325" data-z="-3000" data-rotate="300" data-scale="1">
-        <p>and <b>tiny</b> ideas</p>
-    </div>
+					<p>						
+						<small>Slide me!</small>
+					</p>
+	        <div id="scalable-slider"></div>
 
-    <!--
-        
-        This step here doesn't introduce anything new when it comes to data attributes, but you
-        should notice in the demo that some words of this text are being animated.
-        It's a very basic CSS transition that is applied to the elements when this step element is
-        reached.
-        
-        At the very beginning of the presentation all step elements are given the class of `future`.
-        It means that they haven't been visited yet.
-        
-        When the presentation moves to given step `future` is changed to `present` class name.
-        That's how animation on this step works - text moves when the step has `present` class.
-        
-        Finally when the step is left the `present` class is removed from the element and `past`
-        class is added.
-        
-        So basically every step element has one of three classes: `future`, `present` and `past`.
-        Only one current step has the `present` class.
-        
-    -->
-    <div id="ing" class="step" data-x="3500" data-y="-850" data-rotate="270" data-scale="6">
-        <p>by <b class="positioning">positioning</b>, <b class="rotating">rotating</b> and <b class="scaling">scaling</b> them on an infinite canvas</p>
-    </div>
+	        <div class="color-sliders  ui-helper-clearfix">
+	        	<div id="red-slider"></div>
+	        	<div id="green-slider"></div>
+	        	<div id="blue-slider"></div>
+	        </div>
+					
+					<div>
+		        <svg id="esri-symbol" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200" viewBox="0 0 1024 1024">
+		        	<!-- Grid -->
+		        	<path d="M384.152 423.244c70.012-29.724 145.916-53.514 248.202-62.118-26.032-62.542-54.802-106.692-88.654-147.158-75.448 6.046-144.308 26.376-203.828 50.992 8.764 46.326 25.278 102.406 44.28 158.284zM710.544 595.662c-96.836-1.15-181.388 22.020-239.204 50.452 24.506 52.74 72.94 122.588 91.040 151.362 31.472-11.716 65.346-20.516 91.594-24.634 26.272-4.074 61.268-7.91 84.972-7.518-4.272-61.38-11.47-102.816-28.402-169.662zM453.846 610.924c77.396-35.59 162.366-51.614 247.942-49.272-23.336-80.92-36.746-118.454-56.57-167.7-95.094 4.116-176.212 27.564-250.096 62.574 0 0.002 27.226 87.522 58.724 154.398zM751.394 220.392c-47.442-8.61-116.676-14.074-168.026-10.948 35.018 48.486 60.708 90.698 84.806 150.882 64.954 1.594 153.226 20.988 189.424 35.198-21.614-57.592-62.648-130.682-106.204-175.132zM899.024 602.83c-2.924-53.47-11.118-124.874-30.944-174.6-52.502-21.102-124.266-34.278-187.252-34.85 19.408 45.33 42.028 121.096 53.048 169.85 45.526 5.466 116.732 18.334 165.148 39.6zM855.638 229.014c-67.706-82.89-220.92-153.454-391.484-142.826 38.112 25.142 69.836 63.076 97.618 94.336 42.608-3.888 132.042 3.14 165.706 12.442-5.732-6.78-12.76-13.49-14.566-17.464-4.764-10.292 6.704-12.484 15.912-6.598 11.67 7.45 25.142 16.376 35.82 27.248 19.768 4.422 68.44 21.118 90.994 32.862zM937.33 628.116c-1.944 6.634-13.624 13.306-19.074 11.642 0.792 11.796-1.944 70.504-5.032 93.134 8.126-16.756 23.712-58.292 28.364-75.834l6.616-25.814c6.552-21.952 27.798-97.726 8.558-197.426-21.376-110.73-61.458-150.28-75.45-167.882-35.588-19.356-89.468-36.922-89.468-36.922 48.808 66.094 65.716 97.198 94.91 175.886 16.914 8.81 47.67 25.832 51.488 30.512 3.082 3.674 3.1 10.292-6.538 10.148-8-0.072-23.592-7.75-35.606-10.948 12.81 42.87 22.75 122.948 21.98 176.612 0.002 0 21.19 10.24 19.252 16.892zM875.072 791.098c7.010-7.010 17.53-21.854 21.598-30.516 4.098-35.144 4.234-107.238 2.74-128.26-42.402-17.21-107.956-30.802-155.794-34.342 15.546 57.12 23.354 141.134 24.522 168.51 22.942 2.332 80.908 14.070 106.934 24.608zM766.17 887.674c37.138-23.12 71.98-49.732 97.26-81.708-21.786-5.48-70.43-12.086-94.53-10.552 0-0.002-0.764 57.84-2.73 92.26zM664.882 935.44c18.446-5.95 65.444-27.252 75.232-33.692 2.332-37.918 1.956-80.944 0.4-106.708-49.42 0-119.050 14.442-158.902 31.154 23.138 37.26 55.050 78.296 83.27 109.246zM442.772 903.020c13.808 13.952 68.542 50.178 68.542 50.178 36.388 1.566 82.366-2.696 115.222-8.446-18.116-20.646-63.316-84.648-77.028-106.172-35.018 14.674-79.336 41.662-106.736 64.44zM293.192 750.684c34.804 44.654 89.29 101.328 127.244 132.624 35.89-28.854 76.592-55.818 110.432-72.26-29.192-45.288-72.356-111.040-90.438-151.458-64.762 28.714-101.528 52.776-147.238 91.094zM200.626 571.63c22.16 63.3 43.624 111.58 71.622 151.408 32.754-28.476 99.914-73.452 151.242-98.046-16.91-36.358-41.308-104.308-58.34-155.208-66.112 32.45-115.52 64.104-164.524 101.846zM147.536 381.634c5.284 36.428 22.768 114.94 38.506 154.784 37.344-28.116 121.942-80.3 169.792-101.412-16.732-60.984-28-99.478-37.364-161.036-67.67 30.080-139.228 76.844-170.934 107.664zM139.344 251.922c-2.366 18.366 0.080 52.266 4.696 92.77 37.332-33.406 109.492-76.984 169.782-103.576-6.974-45.94-14.386-119.23-13.612-138.766-55.798 30.622-117.008 92.15-161.86 155.198M320.832 66.298c80.176-33.182 158.226-51.384 248.364-39.090 10.020 1.378 9.17 9.866-1.492 9.936l-12.692 0.34c-72.58 1.134-179.344 24.2-234.59 55.462-1.154 36.85 5.822 95.386 13.232 141.512 50.18-21.080 127.782-42.78 186.694-49.24-33.442-35.57-78.944-69.194-84.39-73.094-5.446-3.92-8.172-10.574-8.172-19.178 0.778-16.012 14.566-18.026 21.944-16.13 24.538-4.772 48.92-10.098 90.456-8.87 175.594-7.648 336.006 91.636 397.208 204.87 155.102 245.298 0.062 583.668-203.016 673.804-86.842 38.544-161.34 55.162-298.642 36.026-137.548-19.214-250.032-86.458-337.364-227.832-107.592-174.18-47.038-377.118-31.918-419.662 64.756-152.734 170.934-233.674 254.378-268.854zM113.686 368.156c-1.744-26.37-3.852-62.534-3.852-62.534-19.392 42.162-30.978 67.564-36.37 116.826 13.572-24.044 40.222-54.292 40.222-54.292zM397.048 902.9c-29.168-21.782-101.43-90.28-131.36-131.566-10.988 6.474-23.268 24.078-39.182 27.132-6.28 1.186-20.35 2.888-24.504 1.186-4.152-1.756 0.928-10.56 5.448-16.448 7.788-10.148 19.128-23.348 35.772-36.244-35.594-52.2-52.506-90.312-76.716-153.212-13.986 8.73-24.164 16.496-36.358 26.23-4.12 3.242-15.42 5.272-20.914 0.366-9.974-8.942-10.116-24.682 3.898-34.648 5.744-4.104 34.204-23.764 40.81-29.292-17.476-50.448-32.104-116.786-36.004-151.186-11.656 10.162-28.050 21.682-32.664 24.838-6.618 1.876-11.070-0.254-12.982-0.568-6.656 71.362 1.012 149.928 22.242 220.858 36.482 122.032 138.768 238.342 276.822 281.634 3.218-4.81 19.074-23.192 25.692-29.080zM469.004 951.76c-13.634-7.784-30.722-19.904-46.656-30.476-6.62 5.866-11.968 14.442-17.258 21.342 18.288 6.262 42.934 6.792 63.914 9.134z" />
 
-    <div id="imagination" class="step" data-x="6700" data-y="-300" data-scale="6">
-        <p>the only <b>limit</b> is your <b class="imagination">imagination</b></p>
-    </div>
+		        	<path d="M166.664 551.344c-18.652-62.956 2.962-121.874 49.642-126.542 41.89-4.202 77.822-66.498 107.346-107.376 60.698-83.996 154.020-69.99 149.37-112.014-13.442-61.632-84.72-15.842-130.706-13.992-31.71 1.272-62.12 5.5-92.404 10.016-85.824 72.854-141.29 180.236-145.028 300.742 24.25 25.572 56.26 83.324 93.198 116.728 4.916-2.182 10.238-4.034 15.882-5.744-18.13-21.062-43.466-48.94-47.3-61.818zM449.692 779.518c21.736-56.616 34.018-81.576 4.648-140.004-64.65-18.26-84.24-24.026-149.338-37.374-33.96-6.94-35.2-5.128-73.416 5.978-6.076 1.744-11.996 3.358-17.622 5.042-6.084 1.932-8.588 1.932-15.882 5.744-15.080 6.76-26.028 17.068-28.574 39.112-4.586 39.986 33.404 71.342 65.482 80.516 40.616 11.636 44.018-1.938 65.342 26.858 14.904 20.124 17.782 57.482 25.394 82.060 4.276 13.758 9.99 27.412 16.888 40.808 29.030 13.5 59.85 23.808 92.106 30.266 7.994-47.416 4.36-111.368 14.972-139.006zM927.022 496.732c-5.016-113.626-56.030-215.254-134.952-286.72-7.396 2.072-16.834 2.43-29.672 0.086-85.566-15.578-105.74 34.402-130.682 70.014-19.040 27.204-85.908 34.652-107.346 65.314-16.712 23.88 0.552 70.898-14.016 98.026-6.69 12.49-3.616 48.736 4.576 60.554 25.754 37.478 68.488 16.678 100.714 30.144 39.258 16.4 43.73 61.928 76.362 95.292 32.592 33.376-41.652 84.746 18.958 206.070 6.498 13.054 14.026 22.6 22.134 29.13 40.984-25.512 77.086-58.024 106.736-95.84 9.208-61.29-11.5-80.898 14.388-136.978 15.956-34.596 43.262-94.476 72.8-135.092z" />
+		        </svg>
 
-    <div id="source" class="step" data-x="6300" data-y="2000" data-rotate="20" data-scale="4">
-        <p>want to know more?</p>
-        <q><a href="http://github.com/bartaz/impress.js">use the source</a>, Luke!</q>
-    </div>
 
-    <div id="one-more-thing" class="step" data-x="6000" data-y="4000" data-scale="2">
-        <p>one more thing...</p>
-    </div>
+		      </div>
 
-    <!--
-        
-        And the last one shows full power and flexibility of impress.js.
-        
-        You can not only position element in 3D, but also rotate it around any axis.
-        So this one here will get rotated by -40 degrees (40 degrees anticlockwise) around X axis and
-        10 degrees (clockwise) around Y axis.
-        
-        You can of course rotate it around Z axis with `data-rotate-z` - it has exactly the same effect
-        as `data-rotate` (these two are basically aliases).
-        
-    -->
-    <div id="its-in-3d" class="step" data-x="6200" data-y="4300" data-z="-100" data-rotate-x="-40" data-rotate-y="10" data-scale="2">
-        <p><span class="have">have</span> <span class="you">you</span> <span class="noticed">noticed</span> <span class="its">it's</span> <span class="in">in</span> <b>3D<sup>*</sup></b>?</p>
-        <span class="footnote">* beat that, prezi ;)</span>
-    </div>
+				</section>
 
-    <!--
-        
-        So to make a summary of all the possible attributes used to position presentation steps, we have:
-        
-        * `data-x`, `data-y`, `data-z` -- they define the position of **the center** of step element on
-            the canvas in pixels; their default value is 0;
-        * `data-rotate-x`, `data-rotate-y`, 'data-rotate-z`, `data-rotate` -- they define the rotation of
-            the element around given axis in degrees; their default value is 0; `data-rotate` and `data-rotate-z`
-            are exactly the same;
-        * `data-scale` -- defines the scale of step element; default value is 1
-        
-        These values are used by impress.js in CSS transformation functions, so for more information consult
-        CSS transfrom docs: https://developer.mozilla.org/en/CSS/transform
-        
-    -->
-    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10">
-    </div>
 
-</div>
+				<section>
+					<h2>Types of Point Symbols</h2>
+					
+					<ul>
+						<li>SimpleMarkerSymbol
+							<p>
+								<small>used to display points as a simple shape, for example, a circle</small>
+							</p>
+						</li>
+						<li>PictureMarkerSymbol
+							<p>
+								<small>uses an image as a marker</small>
+							</p>
+						</li>
+					</ul>
+				</section>
+				<section>
+						<h3>Simple Marker Symbols</h3>
+						<iframe src="map1.html" width="100%" height="400" style="overflow:hidden;" allowfullscreen> </iframe>
+				</section>
 
-<!--
-    
-    Hint is not related to impress.js in any way.
-    
-    But it can show you how to use impress.js features in creative way.
-    
-    When the presentation step is shown (selected) its element gets the class of "active" and the body element
-    gets the class based on active step id `impress-on-ID` (where ID is the step's id)... It may not be
-    so clear because of all these "ids" in previous sentence, so for example when the first step (the one with
-    the id of `bored`) is active, body element gets a class of `impress-on-bored`.
-    
-    This class is used by this hint below. Check CSS file to see how it's shown with delayed CSS animation when
-    the first step of presentation is visible for a couple of seconds.
-    
-    ...
-    
-    And when it comes to this piece of JavaScript below ... kids, don't do this at home ;)
-    It's just a quick and dirty workaround to get different hint text for touch devices.
-    In a real world it should be at least placed in separate JS file ... and the touch content should be
-    probably just hidden somewhere in HTML - not hard-coded in the script.
-    
-    Just sayin' ;)
-    
--->
-<div class="hint">
-    <p>Use a spacebar or arrow keys to navigate</p>
-</div>
-<script>
-if ("ontouchstart" in document.documentElement) { 
-    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+				<section>
+						<h3>Picture Marker Symbols</h3>
+						<iframe src="map2.html" width="100%" height="400" style="overflow:hidden;" allowfullscreen> </iframe>
+				</section>
+
+				<section>
+						<h3>SVG Marker Symbols</h3>
+						<iframe src="map3.html" width="100%" height="400" style="overflow:hidden;" allowfullscreen> </iframe>
+				</section>
+
+
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						
+					</section>
+					<section>
+						<h2>Basement Level 1</h2>
+						<p>Press down or up to navigate.</p>
+					</section>
+					<section>
+						<h2>Basement Level 2</h2>
+						<p>Cornify</p>
+						<a class="test" href="http://cornify.com">
+							<img width="280" height="326" src="https://s3.amazonaws.com/hakim-static/reveal-js/cornify.gif" alt="Unicorn">
+						</a>
+					</section>
+					<section>
+						<h2>Basement Level 3</h2>
+						<p>That's it, time to go back up.</p>
+						<a href="#/2" class="image">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="-webkit-transform: rotate(180deg);">
+						</a>
+					</section>
+				</section>
+
+				<section>
+					<h2>Slides</h2>
+					<p>
+						Not a coder? No problem. There's a fully-featured visual editor for authoring these, try it out at <a href="http://slid.es" target="_blank">http://slid.es</a>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Point of View</h2>
+					<p>
+						Press <strong>ESC</strong> to enter the slide overview.
+					</p>
+					<p>
+						Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
+					</p>
+				</section>
+
+				<section>
+					<h2>Works in Mobile Safari</h2>
+					<p>
+						Try it out! You can swipe through the slides and pinch your way to the overview.
+					</p>
+				</section>
+
+				<section>
+					<h2>Marvelous Unordered List</h2>
+					<ul>
+						<li>No order here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Fantastic Ordered List</h2>
+					<ol>
+						<li>One is smaller than...</li>
+						<li>Two is smaller than...</li>
+						<li>Three!</li>
+					</ol>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						## Markdown support
+
+						For those of you who like that sort of thing. Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
+
+						```
+						<section data-markdown>
+						  ## Markdown support
+
+						  For those of you who like that sort of thing.
+						  Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
+						</section>
+						```
+					</script>
+				</section>
+
+				<section id="transitions">
+					<h2>Transition Styles</h2>
+					<p>
+						You can select from different transitions, like: <br>
+						<a href="?transition=cube#/transitions">Cube</a> -
+						<a href="?transition=page#/transitions">Page</a> -
+						<a href="?transition=concave#/transitions">Concave</a> -
+						<a href="?transition=zoom#/transitions">Zoom</a> -
+						<a href="?transition=linear#/transitions">Linear</a> -
+						<a href="?transition=fade#/transitions">Fade</a> -
+						<a href="?transition=none#/transitions">None</a> -
+						<a href="?#/transitions">Default</a>
+					</p>
+				</section>
+
+				<section id="themes">
+					<h2>Themes</h2>
+					<p>
+						Reveal.js comes with a few themes built in: <br>
+						<a href="?theme=sky#/themes">Sky</a> -
+						<a href="?theme=beige#/themes">Beige</a> -
+						<a href="?theme=simple#/themes">Simple</a> -
+						<a href="?theme=serif#/themes">Serif</a> -
+						<a href="?theme=night#/themes">Night</a> -
+						<a href="?#/themes">Default</a>
+					</p>
+					<p>
+						<small>
+							* Theme demos are loaded after the presentation which leads to flicker. In production you should load your theme in the <code>&lt;head&gt;</code> using a <code>&lt;link&gt;</code>.
+						</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Global State</h2>
+					<p>
+						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
+						will be added as a class to the document element when the slide is open. This lets you
+						apply broader style changes, like switching the background.
+					</p>
+				</section>
+
+				<section data-state="customevent">
+					<h2>Custom Events</h2>
+					<p>
+						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
+					</p>
+					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+Reveal.addEventListener( 'customevent', function() {
+	console.log( '"customevent" has fired' );
+} );
+					</code></pre>
+				</section>
+
+				<section>
+					<section data-background="#007777">
+						<h2>Slide Backgrounds</h2>
+						<p>
+							Set <code>data-background="#007777"</code> on a slide to change the full page background to the given color. All CSS color formats are supported.
+						</p>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png">
+						<h2>Image Backgrounds</h2>
+						<pre><code>&lt;section data-background="image.png"&gt;</code></pre>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" data-background-repeat="repeat" data-background-size="100px">
+						<h2>Repeated Image Backgrounds</h2>
+						<pre><code style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
+					</section>
+				</section>
+
+				<section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+					<h2>Background Transitions</h2>
+					<p>
+						Pass reveal.js the <code>backgroundTransition: 'slide'</code> config argument to make backgrounds slide rather than fade.
+					</p>
+				</section>
+
+				<section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
+					<h2>Background Transition Override</h2>
+					<p>
+						You can override background transitions per slide by using <code>data-background-transition="slide"</code>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Clever Quotes</h2>
+					<p>
+						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
+					</p>
+					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
+						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
+					</blockquote>
+				</section>
+
+				<section>
+					<h2>Pretty Code</h2>
+					<pre><code data-trim contenteditable>
+function linkify( selector ) {
+  if( supports3DTransforms ) {
+
+    var nodes = document.querySelectorAll( selector );
+
+    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
+      var node = nodes[i];
+
+      if( !node.className ) ) {
+        node.className += ' roll';
+      }
+    };
+  }
 }
-</script>
+					</code></pre>
+					<p>Courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
+				</section>
 
-<!--
-    
-    Last, but not least.
-    
-    To make all described above really work, you need to include impress.js in the page.
-    I strongly encourage to minify it first.
-    
-    In here I just include full source of the script to make it more readable.
-    
-    You also need to call a `impress().init()` function to initialize impress.js presentation.
-    And you should do it in the end of your document. Not only because it's a good practice, but also
-    because it should be done when the whole document is ready.
-    Of course you can wrap it in any kind of "DOM ready" event, but I was too lazy to do so ;)
-    
--->
-<script src="js/impress.js"></script>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="http://js.arcgis.com/3.7/"></script>
-<script src="js/main.js"></script>
+				<section>
+					<h2>Intergalactic Interconnections</h2>
+					<p>
+						You can link between slides internally,
+						<a href="#/2/3">like this</a>.
+					</p>
+				</section>
 
-<script>impress().init();</script>
+				<section>
+					<section>
+						<h2>Fragmented Views</h2>
+						<p>Hit the next arrow...</p>
+						<p class="fragment">... to step through ...</p>
+						<ol>
+							<li class="fragment"><code>any type</code></li>
+							<li class="fragment"><em>of view</em></li>
+							<li class="fragment"><strong>fragments</strong></li>
+						</ol>
 
-<!--
-    
-    The `impress()` function also gives you access to the API that controls the presentation.
-    
-    Just store the result of the call:
-    
-        var api = impress();
-    
-    and you will get three functions you can call:
-    
-        `api.init()` - initializes the presentation,
-        `api.next()` - moves to next step of the presentation,
-        `api.prev()` - moves to previous step of the presentation,
-        `api.goto( idx | id | element, [duration] )` - moves the presentation to the step given by its index number
-                id or the DOM element; second parameter can be used to define duration of the transition in ms,
-                but it's optional - if not provided default transition duration for the presentation will be used.
-    
-    You can also simply call `impress()` again to get the API, so `impress().next()` is also allowed.
-    Don't worry, it wont initialize the presentation again.
-    
-    For some example uses of this API check the last part of the source of impress.js where the API
-    is used in event handlers.
-    
--->
+						<aside class="notes">
+							This slide has fragments which are also stepped through in the notes window.
+						</aside>
+					</section>
+					<section>
+						<h2>Fragment Styles</h2>
+						<p>There's a few styles of fragments, like:</p>
+						<p class="fragment grow">grow</p>
+						<p class="fragment shrink">shrink</p>
+						<p class="fragment roll-in">roll-in</p>
+						<p class="fragment fade-out">fade-out</p>
+						<p class="fragment highlight-red">highlight-red</p>
+						<p class="fragment highlight-green">highlight-green</p>
+						<p class="fragment highlight-blue">highlight-blue</p>
+					</section>
+				</section>
 
-</body>
+				<section>
+					<h2>Spectacular image!</h2>
+					<a class="image" href="http://lab.hakim.se/meny/" target="_blank">
+						<img width="320" height="299" src="http://s3.amazonaws.com/hakim-static/portfolio/images/meny.png" alt="Meny">
+					</a>
+				</section>
+
+			
+
+				<section>
+					<h2>Take a Moment</h2>
+					<p>
+						Press b or period on your keyboard to enter the 'paused' mode. This mode is helpful when you want to take distracting slides off the screen
+						during a presentation.
+					</p>
+				</section>
+
+				<section>
+					<h2>Stellar Links</h2>
+					<ul>
+						<li><a href="http://slid.es">Try the online editor</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js">Source code on GitHub</a></li>
+						<li><a href="http://twitter.com/hakimel">Follow me on Twitter</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>THE END</h1>
+					<h3>BY Hakim El Hattab / hakim.se</h3>
+				</section>
+
+			</div>
+
+		</div>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'page', // default/cube/page/concave/zoom/linear/fade/none
+				transitionSpeed: 'slow',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+		<script src="http://js.arcgis.com/3.7/"></script>
+
+		<script src="js/main.js"></script>
+
+	</body>
 </html>
-
-<!--
-    
-    Now you know more or less everything you need to build your first impress.js presentation, but before
-    you start...
-    
-    Oh, you've already cloned the code from GitHub?
-    
-    You have it open in text editor?
-    
-    Stop right there!
-    
-    That's not how you create awesome presentations. This is only a code. Implementation of the idea that
-    first needs to grow in your mind.
-    
-    So if you want to build great presentation take a pencil and piece of paper. And turn off the computer.
-    
-    Sketch, draw and write. Brainstorm your ideas on a paper. Try to build a mind-map of what you'd like
-    to present. It will get you closer and closer to the layout you'll build later with impress.js.
-    
-    Get back to the code only when you have your presentation ready on a paper. It doesn't make sense to do
-    it earlier, because you'll only waste your time fighting with positioning of useless points.
-    
-    If you think I'm crazy, please put your hands on a book called "Presentation Zen". It's all about 
-    creating awesome and engaging presentations.
-    
-    Think about it. 'Cause impress.js may not help you, if you have nothing interesting to say.
-    
--->
-
-<!--
-    
-    Are you still reading this?
-    
-    For real?
-    
-    I'm impressed! Feel free to let me know that you got that far (I'm @bartaz on Twitter), 'cause I'd like
-    to congratulate you personally :)
-    
-    But you don't have to do it now. Take my advice and take some time off. Make yourself a cup of coffee, tea,
-    or anything you like to drink. And raise a glass for me ;)
-    
-    Cheers!
-    
--->
-

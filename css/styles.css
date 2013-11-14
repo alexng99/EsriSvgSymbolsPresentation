@@ -1,0 +1,20 @@
+.iframe body {
+  margin: 0;
+  padding: 0;
+}
+
+
+/*section.what-is-svg {
+
+}*/
+
+section.what-is-svg .ui-slider {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+section.what-is-svg .color-sliders .ui-slider {
+  width: 30%;
+  display: inline-block;
+  margin: 10px;
+}
