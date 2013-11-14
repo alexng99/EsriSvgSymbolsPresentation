@@ -1,8 +1,9 @@
 
 var $ = window.jQuery;
 var Reveal = window.Reveal;
-define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/symbols/SimpleMarkerSymbol", "esri/geometry/Point", "esri/symbols/PictureMarkerSymbol"], function (Map, FeatureLayer, Graphic, SimpleMarkerSymbol, Point, PictureMarkerSymbol) {
+define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/symbols/SimpleMarkerSymbol", "esri/geometry/Point", "esri/symbols/PictureMarkerSymbol", "dojo/request/xhr",], function (Map, FeatureLayer, Graphic, SimpleMarkerSymbol, Point, PictureMarkerSymbol, xhr) {
   //var incidentsUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/MapServer/0";
+  var iconsUrl = "icons.json";
   var simpleMarkerSymbol = new SimpleMarkerSymbol()
     .setSize(20)
     .setColor("green");
@@ -98,7 +99,7 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
       min: 10,
       max: 400,
       slide: function (evt, ui) {
-        evt.stopImmediatePropagation();
+
         $("#esri-symbol").attr({
           width: ui.value,
           height: ui.value
@@ -108,17 +109,17 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
           width: ui.value,
           height: ui.value
         });
-        return false;
+
       }
     });
 
     var updateEsriSymbol = function (evt) {
-      evt.stopImmediatePropagation();
+
       $("#esri-symbol path").css({
         "fill": "rgb(" + [$("#red-slider").slider("option", "value"), $("#green-slider").slider("option", "value"), $("#blue-slider").slider("option", "value")].join(",") + ")"
       });
 
-      return false;
+
     };
 
     $("#red-slider").slider({
@@ -136,6 +137,10 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
       max: 255,
       slide: updateEsriSymbol
     });
+  };
+
+  var getRandomArbitary = function (min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
   };
 
   var map1 = function () {
@@ -193,6 +198,32 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
     
   };
 
+  var map4 = function () {
+
+    var getFontsCompleted = function (icons) {
+      var map = createDefaultMap("map");
+      map.on("load", function () {
+        for(var i=0; i<100; i++) {
+          var longitude = getRandomArbitary(-123, -73);
+          var latitude = getRandomArbitary(26, 48);
+          var iconRandomIndex = getRandomArbitary(0, icons.icons.length);
+          var path = icons.icons[iconRandomIndex].paths.join("");
+          var svgSymbol = new SimpleMarkerSymbol()
+            .setOutline(null)
+            .setSize(getRandomArbitary(20, 50))
+            .setColor([getRandomArbitary(0, 255), getRandomArbitary(0, 255), getRandomArbitary(0, 255)])
+            .setPath(path);
+          var point = new Point(longitude, latitude);
+          var symbol = svgSymbol;          
+          var graphic = new Graphic(point, symbol);
+          map.graphics.add(graphic);
+        }
+      });
+    }
+    ;
+    xhr(iconsUrl, { handleAs: "json" }).then(getFontsCompleted);
+  };
+
 
   $(function () {
 
@@ -204,6 +235,7 @@ define("lja", ["esri/map", "esri/layers/FeatureLayer", "esri/graphic", "esri/sym
     createDefaultMap: createDefaultMap,
     map1: map1,
     map2: map2,
-    map3: map3
+    map3: map3,
+    map4: map4
   };
 });
